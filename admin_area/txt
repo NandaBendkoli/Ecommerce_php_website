@@ -1,0 +1,60 @@
+if (isset($_POST['insert_product'])) {
+// Accessing form variables
+$product_title = trim($_POST['product_title']);
+$product_description = trim($_POST['product_desc']);
+$product_keyword = trim($_POST['product_keyword']);
+$product_category = $_POST['product_category'];
+$product_brands = $_POST['product_brands'];
+$product_price = $_POST['product_price'];
+$product_status = "true";
+
+// Accessing image names
+$product_img1 = $_FILES['product_img1']['name'];
+$product_img2 = $_FILES['product_img2']['name'];
+$product_img3 = $_FILES['product_img3']['name'];
+
+// Accessing temporary image names
+$temp_img1 = $_FILES['product_img1']['tmp_name'];
+$temp_img2 = $_FILES['product_img2']['tmp_name'];
+$temp_img3 = $_FILES['product_img3']['tmp_name'];
+
+// Check if any field is empty
+if (
+empty($product_title) || empty($product_description) || empty($product_keyword) ||
+empty($product_category) || empty($product_brands) || empty($product_price) ||
+empty($product_img1) || empty($product_img2) || empty($product_img3)
+) {
+echo "
+<script>alert('Please fill all required fields.');</script>";
+exit();
+} else {
+// Move uploaded files
+if (
+move_uploaded_file($temp_img1, "./product_images/$product_img1") &&
+move_uploaded_file($temp_img2, "./product_images/$product_img2") &&
+move_uploaded_file($temp_img3, "./product_images/$product_img3")
+) {
+// Insert product into database
+$insert_product = "INSERT INTO `products`
+(product_title, product_desc, product_keyword, category_id, brand_id, product_image1, product_image2, product_image3,
+product_price, date, status)
+VALUES
+('$product_title', '$product_description', '$product_keyword', '$product_category', '$product_brands', '$product_img1',
+'$product_img2', '$product_img3', '$product_price', NOW(), '$product_status')";
+
+$result_query = mysqli_query($conn, $insert_product);
+
+if ($result_query) {
+echo "
+<script>alert('Successfully inserted the product!');</script>";
+} else {
+echo "
+<script>alert('Error inserting product: " . mysqli_error($conn) . "');</script>";
+}
+} else {
+echo "
+<script>alert('Error uploading images. Please check file permissions.');</script>";
+}
+}
+}
+?>
