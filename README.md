@@ -27,10 +27,9 @@ This is a fully functional e-commerce website built using PHP and MySQL. It incl
 - **Database:** MySQL
 
 ## Installation & Setup
-
 1. Clone the repository:
 git clone -> https://github.com/NandaBendkoli/Ecommerce_php_website
-   
+
 2.Move to the project directory:   
    cd e-commerce-php
    
